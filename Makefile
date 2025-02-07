@@ -1,3 +1,10 @@
+RED=\033[1;31m
+YELLOW = \033[1;33m
+ORANGE = \033[1;38;5;214m
+GREEN = \033[1;32m
+CYAN = \033[1;36m
+RESET = \033[0m
+
 NAME = pipex
 
 # SOURCES AND OBJS
@@ -8,7 +15,7 @@ SRCS_DIR = .
 SRCS = $(addprefix $(SRCS_DIR)/, $(SOURCES))
 MAIN_SRC = $(addprefix $(SRCS_DIR)/, $(MAIN))
 
-OBJS_DIR = objs
+OBJS_DIR = build
 OBJS = $(addprefix $(OBJS_DIR)/, $(SOURCES:.c=.o))
 OBJS_MAIN = $(addprefix $(OBJS_DIR)/, $(MAIN:.c=.o))
 
@@ -29,7 +36,7 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJS_MAIN) $(OBJS) $(LIBFT)
-	@echo "Compiling $(NAME)..."
+	@echo "$(YELLOW)Compiling $(NAME)...$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
@@ -39,7 +46,6 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
 $(LIBFT):
-	@echo "Compiling libft..."
 	@make -C ./libft -s
 
 bonus: $(OBJS) $(LIBFT) $(OBJS_BONUS)
@@ -50,18 +56,18 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR_BONUS)/%.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@echo "Removing pipex OBJS"
+	@echo "$(RED)Removing objects$(RESET)"
 	@rm -rf $(OBJS_DIR)
 	@make clean -C ./libft -s
 
 fclean: clean
-	@echo "Removing $(NAME)"
+	@echo "$(RED)Removing $(NAME)$(RESET)"
 	@rm -rf $(NAME)
 	@rm -rf $(BONUS)
-	@echo "Removing libft.a"
+	@echo "$(RED)Removing Libft$(RESET)"
 	@rm -rf $(LIBFT)
 
 re:	fclean all
-	@echo "Re-Done!!"
+	@echo "$(ORANGE)Re-Done!!$(RESET)"
 
 .PHONY: all clean fclean re

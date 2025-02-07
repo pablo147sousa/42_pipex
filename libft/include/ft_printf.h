@@ -1,19 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_printf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/07 16:00:06 by pmoreira         ###   ########.fr       */
+/*   Created: 2024/11/15 17:19:05 by pmoreira          #+#    #+#             */
+/*   Updated: 2024/11/19 13:27:49 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/include/libft.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-int	main()
-{
-	ft_printf("Hello world");
-	return 0;
-}
+# include "libft.h"
+
+int		ft_printf(const char *input, ...);
+int		ft_putchar(int c);
+int		ft_putstr(char *s);
+int		ft_printnbr(int n);
+int		ft_itoh(unsigned int nbr, char type);
+int		ft_printunbr(unsigned int num);
+int		ft_printptr(unsigned long ptr);
+
+#endif

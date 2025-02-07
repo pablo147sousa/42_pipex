@@ -1,19 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/07 16:00:06 by pmoreira         ###   ########.fr       */
+/*   Created: 2024/11/18 10:15:17 by pmoreira          #+#    #+#             */
+/*   Updated: 2025/02/04 14:22:50 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/include/libft.h"
+#include "ft_printf.h"
 
-int	main()
+int	ft_putchar(int c)
 {
-	ft_printf("Hello world");
-	return 0;
+	char	letter;
+
+	letter = (unsigned char) c;
+	write(1, &letter, 1);
+	return (1);
 }

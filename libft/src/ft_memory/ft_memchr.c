@@ -1,19 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/07 16:00:06 by pmoreira         ###   ########.fr       */
+/*   Created: 2024/10/29 12:34:40 by pmoreira          #+#    #+#             */
+/*   Updated: 2025/02/04 14:19:50 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/include/libft.h"
+#include "libft.h"
 
-int	main()
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	ft_printf("Hello world");
-	return 0;
+	unsigned char	*str;
+	unsigned char	cbyte;
+	size_t			i;
+
+	i = 0;
+	str = (unsigned char *) s;
+	cbyte = (unsigned char ) c;
+	while (i < n)
+	{
+		if (str[i] == cbyte)
+			return (&str[i]);
+		i++;
+	}
+	return (0);
 }

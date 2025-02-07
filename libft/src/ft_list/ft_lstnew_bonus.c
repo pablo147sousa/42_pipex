@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/07 16:00:06 by pmoreira         ###   ########.fr       */
+/*   Created: 2024/11/15 17:06:28 by pmoreira          #+#    #+#             */
+/*   Updated: 2025/02/04 16:04:13 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/include/libft.h"
+#include "ft_list.h"
 
-int	main()
+t_list	*ft_lstnew(void *content)
 {
-	ft_printf("Hello world");
-	return 0;
+	t_list	*lst;
+
+	lst = (t_list *) malloc(sizeof(t_list));
+	if (lst == 0)
+		return (0);
+	lst->content = content;
+	lst->next = 0;
+	return (lst);
 }

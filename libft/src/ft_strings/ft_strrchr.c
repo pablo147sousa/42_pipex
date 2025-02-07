@@ -1,19 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/07 16:00:06 by pmoreira         ###   ########.fr       */
+/*   Created: 2024/10/29 16:00:48 by pmoreira          #+#    #+#             */
+/*   Updated: 2025/02/04 14:17:55 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/include/libft.h"
+#include "libft.h"
 
-int	main()
+char	*ft_strrchr(const char *s, int c)
 {
-	ft_printf("Hello world");
-	return 0;
+	int		i;
+	char	*local;
+	char	*str;
+
+	i = 0;
+	local = 0;
+	str = (char *) s;
+	while (str[i] != 0)
+	{
+		if (str[i] == (unsigned char) c)
+			local = &str[i];
+		i++;
+	}
+	if (str[i] == (unsigned char) c)
+		local = &str[i];
+	return (local);
 }

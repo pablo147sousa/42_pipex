@@ -1,19 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/07 16:00:06 by pmoreira         ###   ########.fr       */
+/*   Created: 2024/10/28 13:08:02 by pmoreira          #+#    #+#             */
+/*   Updated: 2025/02/04 14:21:25 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/include/libft.h"
+#include "libft.h"
 
-int	main()
+int	ft_isalnum(int c)
 {
-	ft_printf("Hello world");
-	return 0;
+	int	is_upper;
+	int	is_lower;
+	int	is_digit;
+	int	is_alpha;
+
+	is_upper = (c >= 'A' && c <= 'Z');
+	is_lower = (c >= 'a' && c <= 'z');
+	is_digit = (c >= '0' && c <= '9');
+	is_alpha = (is_upper || is_lower);
+	return (is_alpha || is_digit);
 }

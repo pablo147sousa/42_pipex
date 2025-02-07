@@ -1,19 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/07 16:00:06 by pmoreira         ###   ########.fr       */
+/*   Created: 2024/11/15 17:09:07 by pmoreira          #+#    #+#             */
+/*   Updated: 2025/02/04 14:20:27 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/include/libft.h"
+#include "libft.h"
 
-int	main()
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	ft_printf("Hello world");
-	return 0;
+	t_list	*temp;
+
+	if (*lst == 0)
+		*lst = new;
+	else
+	{
+		temp = *lst;
+		while (temp->next != 0)
+			temp = temp->next;
+		temp->next = new;
+	}
 }
