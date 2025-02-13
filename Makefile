@@ -9,11 +9,14 @@ NAME = pipex
 
 # SOURCES AND OBJS
 MAIN    =	pipex.c
-SOURCES =	
+SOURCES =	parse.c
 
-SRCS_DIR = .
+# Includes
+INCLUDE = include
+INCLUDE_FLAGS = -I$(INCLUDE)
+SRCS_DIR = src
 SRCS = $(addprefix $(SRCS_DIR)/, $(SOURCES))
-MAIN_SRC = $(addprefix $(SRCS_DIR)/, $(MAIN))
+MAIN_SRC = $(addprefix ./, $(MAIN))
 
 OBJS_DIR = build
 OBJS = $(addprefix $(OBJS_DIR)/, $(SOURCES:.c=.o))
@@ -31,7 +34,7 @@ OBJS_BONUS = $(addprefix $(OBJS_DIR)/, $(SOURCES_BONUS:.c=.o))
 
 # COMPILATION STUFFS
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 all: $(NAME)
 
@@ -40,7 +43,10 @@ $(NAME): $(OBJS_MAIN) $(OBJS) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJS_MAIN) $(OBJS) $(LIBFT) -o $(NAME)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE_FLAGS)
+
+$(OBJS_MAIN): $(MAIN_SRC) | $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE_FLAGS)
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
