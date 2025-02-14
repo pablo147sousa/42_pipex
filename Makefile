@@ -9,7 +9,7 @@ NAME = pipex
 
 # SOURCES AND OBJS
 MAIN    =	pipex.c
-SOURCES =	parse.c
+SOURCES =	utils.c cleaners.c
 
 # Includes
 INCLUDE = include

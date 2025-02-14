@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/13 16:24:42 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:43:14 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,10 @@ void	child(char **path, char *program)
 	ft_exec(path, args);
 }
 
-void	parent(char **path, char **program, int ac)
-{
-	int	pid;
-	int	i;
+// void	parent(char **path, char **program, int ac)
+// {
 
-	i = 0;
-	// pid = fork();
-	if (pid == 0)
-	{
-		while (++i < (ac - 1))
-		{
-			fork();
-			child(path, program[i]);
-		}
-	}	// wait(NULL);
-	// else
-	// {
-	// }
-}
+// }
 
 void	ft_exec(char **path, char **program)
 {
@@ -56,22 +41,31 @@ void	ft_exec(char **path, char **program)
 	
 }
 
+void	test(t_pipex *pipex)
+{
+	char	*str;
+
+	str = "";
+	while (str != NULL)
+	{
+		str = get_next_line(pipex->in_fd);
+		if (str != NULL)
+			printf("%s", str);
+		free(str);
+	}
+}
+
 int	main(int ac, char const **av, char *envp[])
 {
-	int		i;
-	int		fds[2];
-	char	**path;
-	char	**args;
+	t_pipex	*pipex;
 
-	if (ac < 0)
+	if (ac != 5)
 		return (0);
-	fds[0] = ft_valid(ac, av);
-	if (fds[0] < 0)
-		return (1);
-	i = -1;
-	args = ft_split(av[1], 32);
-	path = ft_path(envp);
-	parent(path, (char **) av, ac);
-	ft_clean_matrix(path);
+	pipex = ft_init_struct(envp, ac - 2);
+	if (!pipex)
+		return (perror("struct malloc"), 1);
+	check_files(ac, av, pipex);
+	test(pipex);
+	ft_clean_pipex(pipex);
 	return (0);
 }

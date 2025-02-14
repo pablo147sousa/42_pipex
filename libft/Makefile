@@ -40,6 +40,7 @@ SRC_STR =	ft_strings/ft_split.c ft_strings/ft_strchr.c \
 			ft_strings/ft_strlcat.c ft_strings/ft_strlcpy.c ft_strings/ft_strlen.c  \
 			ft_strings/ft_strmapi.c ft_strings/ft_strncmp.c ft_strings/ft_strnstr.c \
 			ft_strings/ft_strrchr.c ft_strings/ft_strtrim.c ft_strings/ft_substr.c \
+			ft_strings/ft_strcmp.c
 
 PRINTF =	ft_printf/ft_putchar.c ft_printf/ft_putstr.c ft_printf/ft_printnbr.c ft_printf/ft_itoh.c ft_printf/ft_printunbr.c ft_printf/ft_printptr.c \
 			ft_printf/ft_printf.c

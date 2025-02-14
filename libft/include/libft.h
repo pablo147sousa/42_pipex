@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 11:59:03 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/06 11:29:32 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:52:39 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 //------------------------MANDATORY-------------------------
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isalpha(int c);
