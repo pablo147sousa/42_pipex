@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:11:31 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/14 16:34:59 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:18:29 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	parent(char **path, char **program, int ac);
 int		check_files(int ac, const char **av, t_pipex *pipex);
 t_pipex	*ft_init_struct(char *envp[], int size);
 char	**ft_path(char *envp[]);
-char	*get_next_line_fd(int dst, int src);
+char	*get_next_line_fd(int dst, int src, const char **av);
 
 // CLEANERS
 

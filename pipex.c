@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/14 16:43:14 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/17 16:36:23 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,20 @@ void	test(t_pipex *pipex)
 {
 	char	*str;
 
-	str = "";
-	while (str != NULL)
+	str = NULL;
+	while (1)
 	{
 		str = get_next_line(pipex->in_fd);
-		if (str != NULL)
-			printf("%s", str);
+		if (!str)
+			break;
+		ft_printf("str = %s", str);
 		free(str);
 	}
 }
 
 int	main(int ac, char const **av, char *envp[])
 {
+	// char	*s;
 	t_pipex	*pipex;
 
 	if (ac != 5)
@@ -64,8 +66,12 @@ int	main(int ac, char const **av, char *envp[])
 	pipex = ft_init_struct(envp, ac - 2);
 	if (!pipex)
 		return (perror("struct malloc"), 1);
-	check_files(ac, av, pipex);
+	if (!check_files(ac, av, pipex))
+		return (1);
+	ft_printf("TEST:\n");
 	test(pipex);
+	if (!ft_strcmp(av[1],"here_doc"))
+		unlink(av[1]);
 	ft_clean_pipex(pipex);
 	return (0);
 }

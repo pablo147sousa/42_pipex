@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/14 16:58:25 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:46:49 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,30 @@
 
 int	check_files(int ac, const char **av, t_pipex *pipex)
 {
-	// int		i;
 	char	*line;
 
 	if (ac <= 1)
-		return (-1);
-	// i = 1;
-	line = "";
+		return (0);
+	line = NULL;
 	pipex->out_fd = open(av[ac - 1], O_RDWR | O_CREAT, 0766);
 	if (!ft_strcmp(av[1],"here_doc"))
 	{
-		pipex->in_fd = open(av[1], O_CREAT, 0766);
+		pipex->in_fd = open(av[1], O_RDWR | O_CREAT , 0766);
 		if (pipex->in_fd < 0)
-			return(perror("here_doc error"), -1);
-		while (*line && !ft_strcmp(line, av[2]))
+			return(perror("here_doc error"), 0);
+		while (1)
 		{
-			line = get_next_line_fd(pipex->in_fd, 0);
+			line = get_next_line_fd(pipex->in_fd, 0, av);
+			if (!line)
+				break ;
 			free(line);
 		}
+		close(pipex->in_fd);
+		free(line);
 	}
+	pipex->in_fd = open(av[1], O_RDONLY);
+	if (pipex->in_fd < 0)
+		return(perror("in_fd error"), 0);
 	return (1);
 }
 
@@ -89,7 +94,7 @@ t_pipex	*ft_init_struct(char *envp[], int size)
 	return (pipex);
 }
 
-char	*get_next_line_fd(int dst, int src)
+char	*get_next_line_fd(int dst, int src, const char **av)
 {
 	char	*line;
 
@@ -98,6 +103,8 @@ char	*get_next_line_fd(int dst, int src)
 	line = get_next_line(src);
 	if (!line)
 		return (perror("gnl error"), NULL);
+	if (!ft_strncmp(line, av[2], ft_strlen(av[2])))
+		return (free(line),NULL);
 	write(dst, line, ft_strlen(line));
 	return (line);
 }
