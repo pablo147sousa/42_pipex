@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:11:31 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/17 15:18:29 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:54:37 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ typedef struct s_pipex
 	int		in_fd;
 	int		out_fd;
 	int		here_doc;
-	int		is_invalid_infile;
+	int		pipe[2];
 	int		cmd_count;
 	char	**paths;
 	char	***cmd_args;
 }	t_pipex;
 
 void	ft_exec(char **path, char **program);
-void	child(char **path, char *program);
-void	parent(char **path, char **program, int ac);
+void	child(t_pipex *pipex, char **program, int count);
+void	parent(t_pipex *pipex, char const **av, int count);
 
 // UTILS
 

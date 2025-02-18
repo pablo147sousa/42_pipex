@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:40:11 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/14 15:53:22 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:34:27 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	ft_clean_pipex(t_pipex *pipex)
 			ft_clean_matrix(pipex->cmd_args[i]);
 		free(pipex->cmd_args);
 	}
+	close(pipex->in_fd);
+	close(pipex->out_fd);
 	free(pipex);
 }
 

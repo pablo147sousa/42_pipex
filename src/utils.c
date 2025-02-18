@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/17 15:46:49 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:46:32 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,9 @@ t_pipex	*ft_init_struct(char *envp[], int size)
 		return (perror("struct malloc"), NULL);
 	pipex->in_fd = -1;
 	pipex->out_fd = -1;
-	pipex->is_invalid_infile = -1;
-	pipex->cmd_count = 0;
+	// pipex->pipe[0] = -1;
+	// pipex->pipe[1] = -1;
+	pipex->cmd_count = size - 1;
 	pipex->here_doc = -1;
 	pipex->cmd_args = NULL;
 	pipex->paths = ft_path(envp);
