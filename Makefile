@@ -9,14 +9,14 @@ NAME = pipex
 
 # SOURCES AND OBJS
 MAIN    =	pipex.c
-SOURCES =	utils.c cleaners.c
+SOURCES =	utils.c
 
 # Includes
-INCLUDE = include
+INCLUDE = .
 INCLUDE_FLAGS = -I$(INCLUDE)
-SRCS_DIR = src
+SRCS_DIR = .
 SRCS = $(addprefix $(SRCS_DIR)/, $(SOURCES))
-MAIN_SRC = $(addprefix ./, $(MAIN))
+MAIN_SRC = $(addprefix $(SRCS_DIR)/, $(MAIN))
 
 OBJS_DIR = build
 OBJS = $(addprefix $(OBJS_DIR)/, $(SOURCES:.c=.o))
@@ -25,16 +25,16 @@ OBJS_MAIN = $(addprefix $(OBJS_DIR)/, $(MAIN:.c=.o))
 LIBFT = ./libft/libft.a
 
 # BONUS STUFF
-BONUS = 
+BONUS = pipex_bonus
 
-SOURCES_BONUS =
-SRCS_DIR_BONUS = bonus
+SOURCES_BONUS = pipex_bonus.c utils_bonus.c
+SRCS_DIR_BONUS = .
 SRCS_BONUS = $(addprefix $(SRCS_DIR_BONUS)/, $(SOURCES_BONUS))
 OBJS_BONUS = $(addprefix $(OBJS_DIR)/, $(SOURCES_BONUS:.c=.o))
 
 # COMPILATION STUFFS
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
@@ -54,9 +54,9 @@ $(OBJS_DIR):
 $(LIBFT):
 	@make -C ./libft -s
 
-bonus: $(OBJS) $(LIBFT) $(OBJS_BONUS)
-	@echo "Compiling $(NAME) bonus $(BONUS)..."
-	@$(CC) $(CFLAGS) -o $(BONUS) $(OBJS) $(OBJS_BONUS) $(LIBFT)
+bonus: $(LIBFT) $(OBJS_BONUS)
+	@echo "$(YELLOW)Compiling $(BONUS)...$(RESET)"
+	@$(CC) $(CFLAGS) -o $(BONUS) $(OBJS_BONUS) $(LIBFT)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR_BONUS)/%.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
@@ -69,6 +69,7 @@ clean:
 fclean: clean
 	@echo "$(RED)Removing $(NAME)$(RESET)"
 	@rm -rf $(NAME)
+	@echo "$(RED)Removing $(BONUS)$(RESET)"
 	@rm -rf $(BONUS)
 	@echo "$(RED)Removing Libft$(RESET)"
 	@rm -rf $(LIBFT)
@@ -76,4 +77,4 @@ fclean: clean
 re:	fclean all
 	@echo "$(ORANGE)Re-Done!!$(RESET)"
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

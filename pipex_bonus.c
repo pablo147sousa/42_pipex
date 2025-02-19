@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/19 14:58:48 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:57:44 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/include/libft.h"
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	ft_clean_pipex(t_pipex *pipex)
 {
@@ -89,8 +89,8 @@ int	main(int ac, char const **av, char *envp[])
 	int		i;
 	t_pipex	*pipex;
 
-	if (ac != 5)
-		return (perror("Invalid input"), 0);
+	if (ac < 5 || (!ft_strcmp(av[1], "here_doc") && ac < 6))
+		return (ft_putstr_fd("Invalid input\n", 2), 0);
 	pipex = ft_init_struct(envp, ac - 2, av);
 	if (!pipex)
 		return (perror("struct malloc"), 1);
@@ -98,8 +98,12 @@ int	main(int ac, char const **av, char *envp[])
 		return (ft_clean_pipex(pipex), 1);
 	dup2(pipex->in_fd, 0);
 	i = -1;
+	if (!ft_strcmp(av[1], "here_doc"))
+		i++;
 	while (++i < pipex->cmd_count)
 		parent(pipex, i);
+	if (!ft_strcmp(av[1], "here_doc"))
+		unlink(av[1]);
 	close(pipex->in_fd);
 	ft_clean_pipex(pipex);
 	return (0);
