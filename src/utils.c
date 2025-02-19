@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/18 14:46:32 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/19 11:36:06 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int	check_files(int ac, const char **av, t_pipex *pipex)
 		return (0);
 	line = NULL;
 	pipex->out_fd = open(av[ac - 1], O_RDWR | O_CREAT, 0766);
-	if (!ft_strcmp(av[1],"here_doc"))
+	if (!ft_strcmp(av[1], "here_doc"))
 	{
-		pipex->in_fd = open(av[1], O_RDWR | O_CREAT , 0766);
+		pipex->in_fd = open(av[1], O_RDWR | O_CREAT, 0766);
 		if (pipex->in_fd < 0)
-			return(perror("here_doc error"), 0);
+			return (perror("here_doc error"), 0);
 		while (1)
 		{
 			line = get_next_line_fd(pipex->in_fd, 0, av);
@@ -37,7 +37,7 @@ int	check_files(int ac, const char **av, t_pipex *pipex)
 	}
 	pipex->in_fd = open(av[1], O_RDONLY);
 	if (pipex->in_fd < 0)
-		return(perror("in_fd error"), 0);
+		return (perror("in_fd error"), 0);
 	return (1);
 }
 
@@ -68,7 +68,7 @@ char	**ft_path(char *envp[])
 	return (matrix);
 }
 
-t_pipex	*ft_init_struct(char *envp[], int size)
+t_pipex	*ft_init_struct(char *envp[], int size, char const **av)
 {
 	t_pipex	*pipex;
 	int		i;
@@ -79,8 +79,6 @@ t_pipex	*ft_init_struct(char *envp[], int size)
 		return (perror("struct malloc"), NULL);
 	pipex->in_fd = -1;
 	pipex->out_fd = -1;
-	// pipex->pipe[0] = -1;
-	// pipex->pipe[1] = -1;
 	pipex->cmd_count = size - 1;
 	pipex->here_doc = -1;
 	pipex->cmd_args = NULL;
@@ -90,8 +88,9 @@ t_pipex	*ft_init_struct(char *envp[], int size)
 	pipex->cmd_args = malloc(sizeof(char **) * size);
 	if (!pipex->cmd_args)
 		return (free(pipex), perror("malloc args"), NULL);
-	while (++i < size)
-		pipex->cmd_args[i] = NULL;
+	while (++i < size - 1)
+		pipex->cmd_args[i] = ft_split(av[i + 2], ' ');
+	pipex->cmd_args[i] = NULL;
 	return (pipex);
 }
 
@@ -105,7 +104,7 @@ char	*get_next_line_fd(int dst, int src, const char **av)
 	if (!line)
 		return (perror("gnl error"), NULL);
 	if (!ft_strncmp(line, av[2], ft_strlen(av[2])))
-		return (free(line),NULL);
+		return (free(line), NULL);
 	write(dst, line, ft_strlen(line));
 	return (line);
 }
