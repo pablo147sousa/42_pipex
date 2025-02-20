@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:11:31 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/19 12:59:45 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:58:20 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_pipex
 	int		here_doc;
 	int		pipe[2];
 	int		cmd_count;
+	int		*childs;
 	char	**paths;
 	char	***cmd_args;
 }	t_pipex;
@@ -40,6 +41,7 @@ void	parent(t_pipex *pipex, int count);
 int		check_files(int ac, const char **av, t_pipex *pipex);
 t_pipex	*ft_init_struct(char *envp[], int size, char const **av);
 char	**ft_path(char *envp[]);
+void	wait_childs(t_pipex *pipex, int ac);
 
 // CLEANERS
 

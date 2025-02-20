@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/19 14:57:44 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:50:27 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	ft_clean_pipex(t_pipex *pipex)
 			ft_clean_matrix(pipex->cmd_args[i]);
 		free(pipex->cmd_args);
 	}
-	close(pipex->out_fd);
+	if (pipex->childs)
+		free(pipex->childs);
+	if (pipex->out_fd > 0)
+		close(pipex->out_fd);
 	free(pipex);
 }
 
@@ -49,11 +52,7 @@ void	child(t_pipex *pipex, char **program, int count)
 	int		i;
 
 	i = 0;
-	close(pipex->pipe[0]);
-	if (count == pipex->cmd_count - 1)
-		dup2(pipex->out_fd, 1);
-	else
-		dup2(pipex->pipe[1], 1);
+	(void ) count;
 	while (pipex->paths[i])
 	{
 		temp = ft_strjoin((const char *) pipex->paths[i] \
@@ -74,12 +73,19 @@ void	parent(t_pipex *pipex, int count)
 	if (pipe(pipex->pipe) < 0)
 		return (perror("pipe error"));
 	pid = fork();
+	pipex->childs[count] = pid;
 	if (pid == 0)
+	{
+		close(pipex->pipe[0]);
+		if (count == pipex->cmd_count - 1)
+			dup2(pipex->out_fd, 1);
+		else
+			dup2(pipex->pipe[1], 1);
 		child(pipex, pipex->cmd_args[count], count);
+	}
 	else
 	{
 		close(pipex->pipe[1]);
-		wait(NULL);
 		dup2(pipex->pipe[0], 0);
 	}
 }
@@ -89,11 +95,13 @@ int	main(int ac, char const **av, char *envp[])
 	int		i;
 	t_pipex	*pipex;
 
+	if (!envp || !*envp)
+		return (ft_putstr_fd("Invalid path\n", 2), 1);
 	if (ac < 5 || (!ft_strcmp(av[1], "here_doc") && ac < 6))
 		return (ft_putstr_fd("Invalid input\n", 2), 0);
 	pipex = ft_init_struct(envp, ac - 2, av);
 	if (!pipex)
-		return (perror("struct malloc"), 1);
+		return (ft_putstr_fd("Unable to generate a valid structure\n", 2), 1);
 	if (!check_files(ac, av, pipex))
 		return (ft_clean_pipex(pipex), 1);
 	dup2(pipex->in_fd, 0);
@@ -104,6 +112,7 @@ int	main(int ac, char const **av, char *envp[])
 		parent(pipex, i);
 	if (!ft_strcmp(av[1], "here_doc"))
 		unlink(av[1]);
+	wait_childs(pipex, ac);
 	close(pipex->in_fd);
 	ft_clean_pipex(pipex);
 	return (0);
