@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/25 14:28:19 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:56:11 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	main(int ac, char const **av, char *envp[])
 	pipex = ft_init_struct(envp, ac - 2, av);
 	if (!pipex)
 		return (ft_putstr_fd("Unable to generate a valid structure\n", 2), 1);
-	if (!check_files(ac, av, pipex) || (pipex->out_fd < 0))
+	if (!check_files(ac, av, pipex))
 		return (ft_clean_pipex(pipex), 1);
 	dup2(pipex->in_fd, 0);
 	close(pipex->in_fd);

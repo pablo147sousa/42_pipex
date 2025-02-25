@@ -27,7 +27,7 @@ LIBFT = ./libft/libft.a
 # BONUS STUFF
 BONUS = pipex_bonus
 
-SOURCES_BONUS = pipex_bonus.c utils_bonus.c
+SOURCES_BONUS = pipex_bonus.c utils_bonus.c aux_bonus.c
 SRCS_DIR_BONUS = bonus
 SRCS_BONUS = $(addprefix $(SRCS_DIR_BONUS)/, $(SOURCES_BONUS))
 OBJS_BONUS = $(addprefix $(OBJS_DIR)/, $(SOURCES_BONUS:.c=.o))
@@ -56,10 +56,10 @@ $(LIBFT):
 
 bonus: $(LIBFT) $(OBJS_BONUS)
 	@echo "$(YELLOW)Compiling $(BONUS)...$(RESET)"
-	@$(CC) $(CFLAGS) -o $(BONUS) $(OBJS_BONUS) $(LIBFT)
+	@$(CC) $(CFLAGS) -o $(BONUS) $(OBJS_BONUS) $(INCLUDE_FLAGS) $(LIBFT)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR_BONUS)/%.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE_FLAGS)
 
 clean:
 	@echo "$(RED)Removing objects$(RESET)"

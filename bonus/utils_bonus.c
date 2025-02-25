@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/20 16:51:23 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:21:20 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,14 @@ char	*get_next_line_fd(int dst, int src, const char **av)
 	return (line);
 }
 
-void	wait_childs(t_pipex *pipex, int ac)
+int	wait_childs(t_pipex *pipex, int ac)
 {
 	int	i;
 	int	status;
+	int	pid_temp;
 
 	i = 0;
+	pid_temp = pipex->childs[i];
 	while (i < ac - 3)
 	{
 		if (pipex->here_doc)
@@ -128,6 +130,9 @@ void	wait_childs(t_pipex *pipex, int ac)
 		}
 		else
 			waitpid(pipex->childs[i], &status, 0);
+		if (WIFEXITED(status) && pid_temp < pipex->childs[i])
+			status = WEXITSTATUS(status);
 		i++;
 	}
+	return (status);
 }

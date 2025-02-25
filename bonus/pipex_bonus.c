@@ -6,44 +6,11 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/24 10:33:44 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:57:21 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex_bonus.h"
-
-void	ft_clean_pipex(t_pipex *pipex)
-{
-	int		i;
-
-	i = -1;
-	if (pipex->paths)
-		ft_clean_matrix(pipex->paths);
-	if (pipex->cmd_args)
-	{
-		while (pipex->cmd_args[++i])
-			ft_clean_matrix(pipex->cmd_args[i]);
-		free(pipex->cmd_args);
-	}
-	if (pipex->childs)
-		free(pipex->childs);
-	if (pipex->out_fd > 0)
-		close(pipex->out_fd);
-	free(pipex);
-}
-
-void	ft_clean_matrix(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	while (matrix[i])
-	{
-		free(matrix[i]);
-		i++;
-	}
-	free(matrix);
-}
+#include "pipex_bonus.h"
 
 void	child(t_pipex *pipex, char **program, int count)
 {
@@ -51,7 +18,9 @@ void	child(t_pipex *pipex, char **program, int count)
 	int		i;
 
 	i = 0;
-	(void ) count;
+	close(pipex->pipe[0]);
+	close(pipex->in_fd);
+	ft_dup(pipex, count);
 	while (pipex->paths[i])
 	{
 		temp = ft_strjoin((const char *) pipex->paths[i] \
@@ -62,30 +31,29 @@ void	child(t_pipex *pipex, char **program, int count)
 	}
 	perror("Command not found");
 	ft_clean_pipex(pipex);
-	exit(0);
+	exit(127);
 }
 
 void	parent(t_pipex *pipex, int count)
 {
 	int	pid;
 
-	if (pipe(pipex->pipe) < 0)
-		return (perror("pipe error"));
+	if (count != pipex->cmd_count - 1)
+	{
+		if (pipe(pipex->pipe) < 0)
+			return (perror("pipe error"));
+	}
 	pid = fork();
+	if (pid < 0)
+		return (perror("PID error"));
 	pipex->childs[count] = pid;
 	if (pid == 0)
-	{
-		close(pipex->pipe[0]);
-		if (count == pipex->cmd_count - 1)
-			dup2(pipex->out_fd, 1);
-		else
-			dup2(pipex->pipe[1], 1);
 		child(pipex, pipex->cmd_args[count], count);
-	}
 	else
 	{
 		close(pipex->pipe[1]);
 		dup2(pipex->pipe[0], 0);
+		close(pipex->pipe[0]);
 	}
 }
 
@@ -104,15 +72,16 @@ int	main(int ac, char const **av, char *envp[])
 	if (!check_files(ac, av, pipex))
 		return (ft_clean_pipex(pipex), 1);
 	dup2(pipex->in_fd, 0);
+	close(pipex->in_fd);
 	i = -1;
 	if (!ft_strcmp(av[1], "here_doc"))
 		i++;
 	while (++i < pipex->cmd_count)
 		parent(pipex, i);
+	close(0);
 	if (!ft_strcmp(av[1], "here_doc"))
 		unlink(av[1]);
-	wait_childs(pipex, ac);
-	close(pipex->in_fd);
+	i = wait_childs(pipex, ac);
 	ft_clean_pipex(pipex);
-	return (0);
+	return (i);
 }
