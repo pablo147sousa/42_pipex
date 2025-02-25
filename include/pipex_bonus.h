@@ -6,13 +6,13 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:11:31 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/20 16:50:08 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:43:50 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
-# include "libft/include/libft.h"
+# include "../libft/include/libft.h"
 
 # include <unistd.h>
 # include <fcntl.h>

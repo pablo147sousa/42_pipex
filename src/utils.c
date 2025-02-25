@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/20 16:57:38 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:07:14 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,20 @@ t_pipex	*ft_init_struct(char *envp[], int size, char const **av)
 	return (pipex);
 }
 
-void	wait_childs(t_pipex *pipex, int ac)
+int	wait_childs(t_pipex *pipex, int ac)
 {
 	int	i;
 	int	status;
+	int	pid_temp;
 
 	i = 0;
+	pid_temp = pipex->childs[i];
 	while (i < ac - 3)
 	{
 		waitpid(pipex->childs[i], &status, 0);
+		if (WIFEXITED(status) && pid_temp < pipex->childs[i])
+			status = WEXITSTATUS(status);
 		i++;
 	}
+	return (status);
 }
