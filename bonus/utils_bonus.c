@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/25 15:21:20 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:18:38 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_pipex	*ft_init_struct(char *envp[], int size, char const **av)
 	if (!pipex->cmd_args)
 		return (free(pipex), perror("malloc args"), NULL);
 	while (++i < size - 1)
-		pipex->cmd_args[i] = ft_split(av[i + 2], ' ');
+		pipex->cmd_args[i] = ft_parse(av[i + 2]);
 	pipex->cmd_args[i] = NULL;
 	pipex->childs = malloc(sizeof(int) * pipex->cmd_count);
 	if (!pipex->childs)

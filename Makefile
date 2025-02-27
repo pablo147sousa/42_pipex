@@ -9,7 +9,7 @@ NAME = pipex
 
 # SOURCES AND OBJS
 MAIN    =	pipex.c
-SOURCES =	utils.c aux.c
+SOURCES =	utils.c aux.c ft_parse.c
 
 # Includes
 INCLUDE = include
@@ -27,7 +27,7 @@ LIBFT = ./libft/libft.a
 # BONUS STUFF
 BONUS = pipex_bonus
 
-SOURCES_BONUS = pipex_bonus.c utils_bonus.c aux_bonus.c
+SOURCES_BONUS = pipex_bonus.c utils_bonus.c aux_bonus.c ft_parse_bonus.c
 SRCS_DIR_BONUS = bonus
 SRCS_BONUS = $(addprefix $(SRCS_DIR_BONUS)/, $(SOURCES_BONUS))
 OBJS_BONUS = $(addprefix $(OBJS_DIR)/, $(SOURCES_BONUS:.c=.o))

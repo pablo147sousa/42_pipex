@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:46:10 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/25 11:33:48 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:55:15 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	ft_clean_matrix(char **matrix)
 	int	i;
 
 	i = 0;
+	if (!matrix)
+		return ;
 	while (matrix[i])
 	{
 		free(matrix[i]);
