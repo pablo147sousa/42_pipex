@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 12:23:53 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/27 16:17:40 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:00:38 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	ft_add_word(char **matrix, const char *start, const char *end)
 	return (1);
 }
 
-static void	count_words(const char *s, int *words)
+static void	count_words(const char *s, int *count)
 {
 	int	quotes;
 	int	valid;
@@ -52,12 +52,12 @@ static void	count_words(const char *s, int *words)
 		if (*s == '\'')
 			quotes = !quotes;
 		if (*(s + 1) && *s == '\'' && *(s + 1) == '\'')
-			*words += 1;
+			*count += 1;
 		else if (*s != ' ' || quotes)
 		{
 			if (!valid)
 			{
-				*words += 1;
+				*count += 1;
 				valid = 1;
 			}
 		}
@@ -114,18 +114,3 @@ char	**ft_parse(const char *s)
 		return (ft_clean_matrix(matrix), NULL);
 	return (matrix);
 }
-// #include <stdio.h>
-
-// int main()
-// {
-// 	char	**matrix;
-// 	char	*s = "cut -d ' ' -f 1";
-
-// 	int i = -1;
-// 	matrix = ft_parse(s);
-// 	if (!matrix)
-// 		return (printf("malloc\n"), 1);
-// 	while(matrix[++i])
-// 		printf("[%d]: %s\n", i, matrix[i]);
-// 	return 0;
-// }
