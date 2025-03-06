@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/25 14:56:11 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:33:28 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	child(t_pipex *pipex, char **program, int count)
 	char	*temp;
 	int		i;
 
+	if (!program)
+		return (ft_clean_pipex(pipex), exit(127));
 	i = 0;
 	close(pipex->pipe[0]);
 	close(pipex->in_fd);
