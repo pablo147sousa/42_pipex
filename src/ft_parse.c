@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 12:23:53 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/27 17:00:48 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/10 13:26:31 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,88 +29,90 @@ static int	ft_add_word(char **matrix, const char *start, const char *end)
 	word = (char *)malloc((end - start + 1) * sizeof(char));
 	if (word == 0)
 		return (0);
+	if (*start == '\'')
+		start++;
+	if (*(end - 1) == '\'')
+		end--;
 	while (start < end)
 	{
-		if (*start != '\'')
-			word[i++] = *start;
+		word[i++] = *start;
 		start++;
+		if (*start == '\\')
+			start++;
 	}
 	word[i] = '\0';
 	*matrix = word;
 	return (1);
 }
 
-static void	count_words(const char *s, int *count)
+static void	count_words(const char *str, int *count, char c)
 {
-	int	quotes;
-	int	valid;
-
-	quotes = 0;
-	valid = 0;
-	while (*s)
+	while (*str)
 	{
-		if (*s == '\'')
-			quotes = !quotes;
-		if (*(s + 1) && *s == '\'' && *(s + 1) == '\'')
-			*count += 1;
-		else if (*s != ' ' || quotes)
+		while (*str == c && *str)
+			str++;
+		if (*str == '\'')
 		{
-			if (!valid)
-			{
-				*count += 1;
-				valid = 1;
-			}
+			str++;
+			*count += 1;
+			while (*str && *str != '\'')
+				str++;
+			while (*str && *str != c)
+				str++;
 		}
-		else if (*s == ' ' && !quotes)
-			valid = 0;
-		s++;
+		if (*str && *str != c)
+			*count += 1;
+		while (*str != c && *str)
+			str++;
 	}
 }
 
-static int	process_str(char **matrix, const char *s)
+static int	process_str(char **matrix, const char *s, char c, int *index)
 {
-	int			quotes;
-	int			index;
 	const char	*start;
 
-	index = 0;
-	quotes = 0;
 	while (*s)
 	{
-		while (*s == ' ')
+		while (*s && *s == c)
 			s++;
-		start = (char *)s;
-		while (*s && (*s != ' ' || quotes))
+		start = s;
+		if (*s == '\'')
 		{
-			if (*s == '\'')
-				quotes = !quotes;
 			s++;
+			while (*s && *s != '\'')
+				s++;
+			while (*s && *s != c)
+				s++;
 		}
-		if (s > start)
+		else
 		{
-			if (!ft_add_word(&matrix[index++], start, s))
-				return (ft_free(matrix, index), 0);
+			while (*s && *s != c)
+				s++;
 		}
+		if (!ft_add_word(&matrix[(*index)++], start, s))
+			return (ft_free(matrix, *index), 0);
 	}
 	return (1);
 }
 
-char	**ft_parse(const char *s)
+char	**ft_parse(const char *s, char c)
 {
 	char	**matrix;
 	int		size;
+	int		index;
 
 	if (!s)
 		return (NULL);
 	size = 0;
-	count_words(s, &size);
+	count_words(s, &size, ' ');
 	if (size == 0)
 		return (NULL);
 	matrix = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!matrix)
 		return (NULL);
 	matrix[size] = NULL;
-	if (!process_str(matrix, s))
-		return (ft_clean_matrix(matrix), NULL);
+	index = 0;
+	if (!process_str(matrix, s, c, &index))
+		return (NULL);
 	return (matrix);
 }
