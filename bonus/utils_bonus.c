@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/27 16:18:38 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/11 09:29:42 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,16 @@ t_pipex	*ft_init_struct(char *envp[], int size, char const **av)
 		return (ft_putstr_fd("Error on malloc of the struct\n", 2), NULL);
 	pipex->in_fd = -1;
 	pipex->out_fd = -1;
-	pipex->cmd_count = size - 1;
 	pipex->here_doc = (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0);
+	pipex->cmd_count = size - 1 - (pipex->here_doc);
 	pipex->paths = ft_path(envp);
 	if (!pipex->paths)
 		return (free(pipex), ft_putstr_fd("Error on env paths\n", 2), NULL);
 	pipex->cmd_args = malloc(sizeof(char **) * size);
 	if (!pipex->cmd_args)
 		return (free(pipex), perror("malloc args"), NULL);
-	while (++i < size - 1)
-		pipex->cmd_args[i] = ft_parse(av[i + 2]);
+	while (++i < pipex->cmd_count)
+		pipex->cmd_args[i] = ft_parse(av[i + 2 + (pipex->here_doc)], ' ');
 	pipex->cmd_args[i] = NULL;
 	pipex->childs = malloc(sizeof(int) * pipex->cmd_count);
 	if (!pipex->childs)
@@ -107,13 +107,13 @@ char	*get_next_line_fd(int dst, int src, const char **av)
 	line = get_next_line(src);
 	if (!line)
 		return (perror("gnl error"), NULL);
-	if (!ft_strncmp(line, av[2], ft_strlen(av[2])))
+	if (!line || !ft_strncmp(line, av[2], ft_strlen(av[2])))
 		return (free(line), NULL);
 	write(dst, line, ft_strlen(line));
 	return (line);
 }
 
-int	wait_childs(t_pipex *pipex, int ac)
+int	wait_childs(t_pipex *pipex)
 {
 	int	i;
 	int	status;
@@ -121,15 +121,9 @@ int	wait_childs(t_pipex *pipex, int ac)
 
 	i = 0;
 	pid_temp = pipex->childs[i];
-	while (i < ac - 3)
+	while (i < pipex->cmd_count)
 	{
-		if (pipex->here_doc)
-		{
-			if (i != ((ac - 3) - 4))
-				waitpid(pipex->childs[i], &status, 0);
-		}
-		else
-			waitpid(pipex->childs[i], &status, 0);
+		waitpid(pipex->childs[i], &status, 0);
 		if (WIFEXITED(status) && pid_temp < pipex->childs[i])
 			status = WEXITSTATUS(status);
 		i++;

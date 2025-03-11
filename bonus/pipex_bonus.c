@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/25 14:57:21 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/11 09:30:25 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,12 @@ int	main(int ac, char const **av, char *envp[])
 	dup2(pipex->in_fd, 0);
 	close(pipex->in_fd);
 	i = -1;
-	if (!ft_strcmp(av[1], "here_doc"))
-		i++;
 	while (++i < pipex->cmd_count)
 		parent(pipex, i);
 	close(0);
 	if (!ft_strcmp(av[1], "here_doc"))
 		unlink(av[1]);
-	i = wait_childs(pipex, ac);
+	i = wait_childs(pipex);
 	ft_clean_pipex(pipex);
 	return (i);
 }
