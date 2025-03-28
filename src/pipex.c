@@ -6,11 +6,17 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/06 12:33:28 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:23:26 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	dup_and_close(int dst, int src)
+{
+	dup2(dst, src);
+	close(dst);
+}
 
 void	child(t_pipex *pipex, char **program, int count)
 {
@@ -73,8 +79,7 @@ int	main(int ac, char const **av, char *envp[])
 		return (ft_putstr_fd("Unable to generate a valid structure\n", 2), 1);
 	if (!check_files(ac, av, pipex))
 		return (ft_clean_pipex(pipex), 1);
-	dup2(pipex->in_fd, 0);
-	close(pipex->in_fd);
+	dup_and_close(pipex->in_fd, 0);
 	i = -1;
 	while (++i < pipex->cmd_count)
 		parent(pipex, i);

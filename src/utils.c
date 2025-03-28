@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/10 13:18:01 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:24:38 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ int	check_files(int ac, const char **av, t_pipex *pipex)
 		return (perror("out_fd error"), 0);
 	pipex->in_fd = open(av[1], O_RDONLY);
 	if (pipex->in_fd < 0)
-		return (perror("in_fd error"), 0);
+	{
+		pipex->in_fd = open("/dev/null", O_RDONLY);
+		return (perror(NULL), 1);
+	}
 	return (1);
 }
 
