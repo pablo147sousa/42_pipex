@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:46:10 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/02/27 15:55:15 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:55:07 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	ft_clean_pipex(t_pipex *pipex)
 	i = -1;
 	if (pipex->paths)
 		ft_clean_matrix(pipex->paths);
+	if (pipex->envp)
+		pipex->envp = NULL;
 	if (pipex->cmd_args)
 	{
 		while (pipex->cmd_args[++i])

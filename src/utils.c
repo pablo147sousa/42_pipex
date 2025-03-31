@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/28 16:24:38 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:00:13 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,7 @@ t_pipex	*ft_init_struct(char *envp[], int size, char const **av)
 	pipex->cmd_count = size - 1;
 	pipex->here_doc = (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0);
 	pipex->paths = ft_path(envp);
-	if (!pipex->paths)
-		return (free(pipex), ft_putstr_fd("Error on env paths\n", 2), NULL);
+	pipex->envp = envp;
 	pipex->cmd_args = malloc(sizeof(char **) * size);
 	if (!pipex->cmd_args)
 		return (free(pipex), perror("malloc args"), NULL);

@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:11:31 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/10 11:38:35 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:24:42 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_pipex
 	int		cmd_count;
 	int		*childs;
 	char	**paths;
+	char	**envp;
 	char	***cmd_args;
 }	t_pipex;
 

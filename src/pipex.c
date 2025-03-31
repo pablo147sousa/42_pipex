@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/28 16:23:26 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:39:25 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,21 @@ void	dup_and_close(int dst, int src)
 {
 	dup2(dst, src);
 	close(dst);
+}
+
+int	is_exec(t_pipex *pipex, char **program)
+{
+	if (program[0][0] == '.')
+	{
+		if (access(program[0], X_OK) == -1)
+		{
+			perror("Error");
+			ft_clean_pipex(pipex);
+			exit(126);
+		}
+		return (1);
+	}
+	return (0);
 }
 
 void	child(t_pipex *pipex, char **program, int count)
@@ -29,13 +44,18 @@ void	child(t_pipex *pipex, char **program, int count)
 	close(pipex->pipe[0]);
 	close(pipex->in_fd);
 	ft_dup(pipex, count);
-	while (pipex->paths[i])
+	if (!pipex->paths || is_exec(pipex, program))
+		execve((const char *) program[0], program, pipex->envp);
+	else
 	{
-		temp = ft_strjoin((const char *) pipex->paths[i] \
-		, (const char *) program[0]);
-		execve(temp, program, NULL);
-		free(temp);
-		i++;
+		while (pipex->paths[i])
+		{
+			temp = ft_strjoin((const char *) pipex->paths[i] \
+			, (const char *) program[0]);
+			execve(temp, program, pipex->envp);
+			free(temp);
+			i++;
+		}
 	}
 	perror("Command not found");
 	ft_clean_pipex(pipex);
