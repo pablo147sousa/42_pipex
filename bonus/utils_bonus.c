@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/11 09:29:42 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/04 16:32:46 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,26 @@
 
 int	check_files(int ac, const char **av, t_pipex *pipex)
 {
-	char	*line;
-
-	line = NULL;
-	pipex->out_fd = open(av[ac - 1], O_RDWR | O_CREAT, 0766);
+	pipex->out_fd = open(av[ac - 1], O_RDWR | O_TRUNC | O_CREAT, 0766);
 	if (pipex->out_fd < 0)
 		return (perror("out_fd error"), 0);
 	if (pipex->here_doc)
-	{
-		pipex->in_fd = open(av[1], O_RDWR | O_CREAT, 0766);
-		if (pipex->in_fd < 0)
-			return (perror("here_doc error"), 0);
-		while (1)
-		{
-			line = get_next_line_fd(pipex->in_fd, 0, av);
-			if (!line)
-				break ;
-			free(line);
-		}
-		close(pipex->in_fd);
-		free(line);
-	}
+		ft_heredoc(pipex, av);
 	pipex->in_fd = open(av[1], O_RDONLY);
 	if (pipex->in_fd < 0)
-		return (perror("in_fd error"), 0);
+	{
+		pipex->in_fd = open("/dev/null", O_RDONLY);
+		return (perror(NULL), 1);
+	}
 	return (1);
 }
 
-char	**ft_path(char *envp[])
+/// @brief Function to get a matrix of the enviroment variable.
+/// @param envp Enviroment.
+/// @param target Enviroment variable determinated.
+/// @param split Char to split into a matrix.
+/// @return A matrix null terminated. Each string terminated by /
+char	**ft_getenv(char **envp, char *target, char split)
 {
 	char	**matrix;
 	char	*temp;
@@ -51,11 +43,11 @@ char	**ft_path(char *envp[])
 	temp = NULL;
 	while (envp[i])
 	{
-		if (ft_strnstr(envp[i], "PATH", 4))
-			temp = envp[i] + 5;
+		if (ft_strnstr(envp[i], target, ft_strlen(target)))
+			temp = envp[i] + (ft_strlen(target) + 1);
 		i++;
 	}
-	matrix = ft_split((const char *) temp, ':');
+	matrix = ft_split((const char *) temp, split);
 	if (!matrix)
 		return (NULL);
 	i = 0;
@@ -82,9 +74,8 @@ t_pipex	*ft_init_struct(char *envp[], int size, char const **av)
 	pipex->out_fd = -1;
 	pipex->here_doc = (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0);
 	pipex->cmd_count = size - 1 - (pipex->here_doc);
-	pipex->paths = ft_path(envp);
-	if (!pipex->paths)
-		return (free(pipex), ft_putstr_fd("Error on env paths\n", 2), NULL);
+	pipex->paths = ft_getenv(envp, "PATH", ':');
+	pipex->envp = envp;
 	pipex->cmd_args = malloc(sizeof(char **) * size);
 	if (!pipex->cmd_args)
 		return (free(pipex), perror("malloc args"), NULL);
@@ -106,7 +97,7 @@ char	*get_next_line_fd(int dst, int src, const char **av)
 		return (perror("file error"), NULL);
 	line = get_next_line(src);
 	if (!line)
-		return (perror("gnl error"), NULL);
+		return (perror("Signal"), NULL);
 	if (!line || !ft_strncmp(line, av[2], ft_strlen(av[2])))
 		return (free(line), NULL);
 	write(dst, line, ft_strlen(line));

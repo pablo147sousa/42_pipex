@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/04/04 14:48:58 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/04 15:15:09 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,29 +105,3 @@ int	main(int ac, char const **av, char *envp[])
 	ft_clean_pipex(pipex);
 	return (i);
 }
-
-// int	main(int ac, char const **av, char *envp[])
-// {
-// 	int		i;
-// 	t_pipex	*pipex;
-
-// 	if (!envp || !*envp)
-// 		return (ft_putstr_fd("Invalid path\n", 2), 1);
-// 	if (ac != 5)
-// 		return (ft_putstr_fd("Invalid input\n", 2), 0);
-// 	pipex = ft_init_struct(envp, ac - 2, av);
-// 	if (!pipex)
-// 		return (ft_putstr_fd("Unable to generate a valid structure\n", 2), 1);
-// 	if (!check_files(ac, av, pipex))
-// 		return (ft_clean_pipex(pipex), 1);
-// 	dup_and_close(pipex->in_fd, 0);
-// 	char *args[] = {"/home/pablo/test.sh", NULL};
-// 	execve(args[0], args, envp);
-// 	i = -1;
-// 	while (++i < pipex->cmd_count)
-// 		parent(pipex, i);
-// 	close(0);
-// 	i = wait_childs(pipex, ac);
-// 	ft_clean_pipex(pipex);
-// 	return (i);
-// }
