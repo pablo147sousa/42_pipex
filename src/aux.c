@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:46:10 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/31 15:55:07 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:54:46 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,24 @@ int	ft_dup(t_pipex *pipex, int count)
 	}
 	close(pipex->out_fd);
 	return (status);
+}
+
+void	try_run(t_pipex *pipex, char **program)
+{
+	if (program[0])
+	{
+		if (access(program[0], F_OK) == -1)
+		{
+			perror("Command not found");
+			ft_clean_pipex(pipex);
+			exit(127);
+		}
+		if (access(program[0], X_OK) == -1)
+		{
+			perror("Error");
+			ft_clean_pipex(pipex);
+			exit(126);
+		}
+		execve(program[0], program, pipex->envp);
+	}
 }

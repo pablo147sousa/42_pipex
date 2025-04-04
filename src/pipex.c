@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/31 16:39:25 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:48:58 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,48 +18,45 @@ void	dup_and_close(int dst, int src)
 	close(dst);
 }
 
-int	is_exec(t_pipex *pipex, char **program)
+void	is_exec(t_pipex *pipex, char **program)
 {
-	if (program[0][0] == '.')
+	char	**av;
+	char	*temp;
+
+	av = ft_getenv(pipex->envp, "HOME", '0');
+	if (program[0][0] == '~' && program[0][1] == '/' && av)
 	{
-		if (access(program[0], X_OK) == -1)
-		{
-			perror("Error");
-			ft_clean_pipex(pipex);
-			exit(126);
-		}
-		return (1);
+		temp = program[0];
+		program[0] = ft_strjoin(av[0], program[0] + 2);
+		free(temp);
+		ft_clean_matrix(av);
+		execve(program[0], program, pipex->envp);
 	}
-	return (0);
+	if (av)
+		ft_clean_matrix(av);
+	return (try_run(pipex, program));
 }
 
 void	child(t_pipex *pipex, char **program, int count)
 {
-	char	*temp;
 	int		i;
+	char	*temp;
 
+	i = 0;
 	if (!program)
 		return (ft_clean_pipex(pipex), exit(127));
-	i = 0;
 	close(pipex->pipe[0]);
 	close(pipex->in_fd);
 	ft_dup(pipex, count);
-	if (!pipex->paths || is_exec(pipex, program))
-		execve((const char *) program[0], program, pipex->envp);
-	else
+	while (pipex->paths && pipex->paths[i])
 	{
-		while (pipex->paths[i])
-		{
-			temp = ft_strjoin((const char *) pipex->paths[i] \
-			, (const char *) program[0]);
-			execve(temp, program, pipex->envp);
-			free(temp);
-			i++;
-		}
+		temp = ft_strjoin((const char *) pipex->paths[i] \
+		, (const char *) program[0]);
+		execve(temp, program, pipex->envp);
+		free(temp);
+		i++;
 	}
-	perror("Command not found");
-	ft_clean_pipex(pipex);
-	exit(127);
+	is_exec(pipex, program);
 }
 
 void	parent(t_pipex *pipex, int count)
@@ -108,3 +105,29 @@ int	main(int ac, char const **av, char *envp[])
 	ft_clean_pipex(pipex);
 	return (i);
 }
+
+// int	main(int ac, char const **av, char *envp[])
+// {
+// 	int		i;
+// 	t_pipex	*pipex;
+
+// 	if (!envp || !*envp)
+// 		return (ft_putstr_fd("Invalid path\n", 2), 1);
+// 	if (ac != 5)
+// 		return (ft_putstr_fd("Invalid input\n", 2), 0);
+// 	pipex = ft_init_struct(envp, ac - 2, av);
+// 	if (!pipex)
+// 		return (ft_putstr_fd("Unable to generate a valid structure\n", 2), 1);
+// 	if (!check_files(ac, av, pipex))
+// 		return (ft_clean_pipex(pipex), 1);
+// 	dup_and_close(pipex->in_fd, 0);
+// 	char *args[] = {"/home/pablo/test.sh", NULL};
+// 	execve(args[0], args, envp);
+// 	i = -1;
+// 	while (++i < pipex->cmd_count)
+// 		parent(pipex, i);
+// 	close(0);
+// 	i = wait_childs(pipex, ac);
+// 	ft_clean_pipex(pipex);
+// 	return (i);
+// }

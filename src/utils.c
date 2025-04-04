@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:10:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/31 16:00:13 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:22:25 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,12 @@ int	check_files(int ac, const char **av, t_pipex *pipex)
 	return (1);
 }
 
-char	**ft_path(char *envp[])
+/// @brief Function to get a matrix of the enviroment variable.
+/// @param envp Enviroment.
+/// @param target Enviroment variable determinated.
+/// @param split Char to split into a matrix.
+/// @return A matrix null terminated. Each string terminated by /
+char	**ft_getenv(char **envp, char *target, char split)
 {
 	char	**matrix;
 	char	*temp;
@@ -36,11 +41,11 @@ char	**ft_path(char *envp[])
 	temp = NULL;
 	while (envp[i])
 	{
-		if (ft_strnstr(envp[i], "PATH", 4))
-			temp = envp[i] + 5;
+		if (ft_strnstr(envp[i], target, ft_strlen(target)))
+			temp = envp[i] + (ft_strlen(target) + 1);
 		i++;
 	}
-	matrix = ft_split((const char *) temp, ':');
+	matrix = ft_split((const char *) temp, split);
 	if (!matrix)
 		return (NULL);
 	i = 0;
@@ -67,7 +72,7 @@ t_pipex	*ft_init_struct(char *envp[], int size, char const **av)
 	pipex->out_fd = -1;
 	pipex->cmd_count = size - 1;
 	pipex->here_doc = (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0);
-	pipex->paths = ft_path(envp);
+	pipex->paths = ft_getenv(envp, "PATH", ':');
 	pipex->envp = envp;
 	pipex->cmd_args = malloc(sizeof(char **) * size);
 	if (!pipex->cmd_args)

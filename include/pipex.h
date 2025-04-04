@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:11:31 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/03/31 15:24:42 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:30:14 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	**ft_parse(const char *s, char c);
 
 int		check_files(int ac, const char **av, t_pipex *pipex);
 t_pipex	*ft_init_struct(char *envp[], int size, char const **av);
-char	**ft_path(char *envp[]);
 int		wait_childs(t_pipex *pipex, int ac);
 
 // AUXS
@@ -50,5 +49,7 @@ int		wait_childs(t_pipex *pipex, int ac);
 int		ft_dup(t_pipex *pipex, int count);
 void	ft_clean_matrix(char **matrix);
 void	ft_clean_pipex(t_pipex *pipex);
+char	**ft_getenv(char **envp, char *target, char split);
+void	try_run(t_pipex *pipex, char **program);
 
 #endif
