@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 10:39:39 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/04/04 15:14:38 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:51:36 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void	is_exec(t_pipex *pipex, char **program)
 	char	**av;
 	char	*temp;
 
-	av = ft_getenv(pipex->envp, "HOME", '0');
-	if (program[0][0] == '~' && program[0][1] == '/' && av)
+	if (program[0][0] == '~' && program[0][1] == '/')
 	{
+		av = ft_getenv(pipex->envp, "HOME", '0');
+		if (!av)
+			return (try_run(pipex, program));
 		temp = program[0];
 		program[0] = ft_strjoin(av[0], program[0] + 2);
 		free(temp);
 		ft_clean_matrix(av);
 		execve(program[0], program, pipex->envp);
 	}
-	if (av)
-		ft_clean_matrix(av);
 	return (try_run(pipex, program));
 }
 

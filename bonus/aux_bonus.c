@@ -6,7 +6,7 @@
 /*   By: pmoreira <pmoreira@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:50:57 by pmoreira          #+#    #+#             */
-/*   Updated: 2025/04/04 15:32:37 by pmoreira         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:50:19 by pmoreira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	ft_clean_matrix(char **matrix)
 		i++;
 	}
 	free(matrix);
+	matrix = NULL;
 }
 
 int	ft_dup(t_pipex *pipex, int count)
@@ -89,6 +90,7 @@ void	try_run(t_pipex *pipex, char **program)
 			exit(126);
 		}
 		execve(program[0], program, pipex->envp);
+		ft_clean_pipex(pipex);
 	}
 }
 
